@@ -6,10 +6,14 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.UUID;
 
 
 /**
  * 模拟Servlet工作
+ * cookie流程(每次重启验证前 清空浏览器缓存)  浏览器访问home 没有带cookie 服务器为它创建session 但没有登录
+ *                                          访问not 模拟登录  返回home 显示已登录
  * 缺点 单线程
  * 可定义抽象类AbstractServlet 实现Servlet接口中通用方法
  */
@@ -61,6 +65,12 @@ public class Catalina {
             //构建响应对象
             Response response = new Response();
             response.setOs(accept.getOutputStream());
+            //添加cookie
+            if (request.getHeaders().get("cookie")==null||!request.getHeaders().get("cookie").contains("jsessionid")){
+                String jsessionid = UUID.randomUUID().toString();
+                Container.SESSIONS.put(jsessionid,new HashMap<>(8));
+                response.addHeader("set-cookie","jsessionid="+jsessionid);
+            }
             
             servlet.service(request, response);
         }

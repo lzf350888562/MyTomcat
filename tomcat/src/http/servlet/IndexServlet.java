@@ -1,6 +1,8 @@
 package http.servlet;
 
 
+import java.util.Map;
+
 public class IndexServlet implements Servlet {
     public IndexServlet() {
         init();
@@ -14,8 +16,8 @@ public class IndexServlet implements Servlet {
     @Override
     public void service(Request request, Response response) {
         String remoteHost = request.getRemoteHost();
-        System.out.println(remoteHost+"coming");
-        response.write("<h1>进入首页index</h1>");
+        System.out.println(remoteHost+"is coming");
+        
     }
     
     @Override
